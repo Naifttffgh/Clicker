@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clicker</title>
+
+<!-- Google AdSense -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5167186823593206"
+     crossorigin="anonymous"></script>
+
+<style>
+body{
+    font-family:Arial;
+    text-align:center;
+    background:#111;
+    color:white;
+    margin:0;
+}
+
+#backBtn{
+    position:fixed;
+    top:10px;
+    right:10px;
+    padding:8px 14px;
+    background:#444;
+    color:white;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+#shop{
+    position:fixed;
+    top:50px;
+    left:10px;
+    background:#1e1e1e;
+    padding:15px;
+    border-radius:12px;
+    width:230px;
+    text-align:right;
+}
+
+.shopBtn{
+    width:100%;
+    margin-top:6px;
+    padding:6px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    background:#2196F3;
+    color:white;
+}
+
+select{
+    width:100%;
+    margin-top:8px;
+    padding:6px;
+}
+
+#clickBtn{
+    margin-top:140px;
+    padding:20px 40px;
+    font-size:22px;
+    background:#4CAF50;
+    border:none;
+    border-radius:12px;
+    cursor:pointer;
+}
+
+#achievementPopup{
+    position:fixed;
+    top:20px;
+    right:-400px;
+    background:#333;
+    padding:15px 25px;
+    border-radius:10px;
+    transition:0.6s ease;
+}
+
+.ad-top{
+    margin-top:70px;
+    max-width:900px;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+.ad-bottom{
+    margin-top:40px;
+    margin-bottom:20px;
+    max-width:900px;
+    margin-left:auto;
+    margin-right:auto;
+}
+</style>
+</head>
+<body>
+
+<button id="backBtn" onclick="window.location.href='index.html'">⬅ رجوع</button>
+
+<!-- إعلان أعلى بدون التأثير على المتجر -->
+<div class="ad-top">
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-5167186823593206"
+     data-ad-slot="6368670320"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<div id="shop">
+<h3>🛒 المتجر</h3>
+
+<select id="amountSelect">
+<option value="1">1</option>
+<option value="5">5</option>
+<option value="10">10</option>
+<option value="50">50</option>
+<option value="100">100</option>
+<option value="500">500</option>
+<option value="1000">1000</option>
+<option value="5000">5000</option>
+<option value="10000">10000</option>
+<option value="50000">50000</option>
+</select>
+
+<button class="shopBtn" onclick="buyUpgrade()">تطوير (1000)</button>
+<button class="shopBtn" onclick="buyAuto()">🤖 Auto (1000)</button>
+<button class="shopBtn" onclick="buySuper()">⚡ تطوير خارق</button>
+</div>
+
+<h2>💰 المال: <span id="money">1</span></h2>
+<p>⚡ قيمة الضغطة: <span id="clickValue">1.001</span></p>
+<p>🤖 عدد الأوتو: <span id="autoCount">0</span></p>
+
+<button id="clickBtn">اضغط</button>
+
+<div id="achievementPopup"></div>
+
+<!-- إعلان أسفل بعيد عن زر الضغط -->
+<div class="ad-bottom">
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-5167186823593206"
+     data-ad-slot="9353926319"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div>
+
+<script>
+/* نفس كود لعبتك بدون تعديل */
+let money = parseFloat(localStorage.getItem("money")) || 1;
+let clickValue = parseFloat(localStorage.getItem("clickValue")) || 1.001;
+let autoCount = parseInt(localStorage.getItem("autoCount")) || 0;
+
+let upgradeCost = parseFloat(localStorage.getItem("upgradeCost")) || 1000;
+let autoCost = parseFloat(localStorage.getItem("autoCost")) || 1000;
+let superCost = parseFloat(localStorage.getItem("superCost")) || 100000;
+
+const moneyEl = document.getElementById("money");
+const clickValueEl = document.getElementById("clickValue");
+const autoEl = document.getElementById("autoCount");
+const popup = document.getElementById("achievementPopup");
+
+function save(){
+localStorage.setItem("money",money);
+localStorage.setItem("clickValue",clickValue);
+localStorage.setItem("autoCount",autoCount);
+localStorage.setItem("upgradeCost",upgradeCost);
+localStorage.setItem("autoCost",autoCost);
+localStorage.setItem("superCost",superCost);
+}
+
+function update(){
+moneyEl.textContent = money.toFixed(3);
+clickValueEl.textContent = clickValue.toFixed(3);
+autoEl.textContent = autoCount;
+save();
+}
+
+document.getElementById("clickBtn").addEventListener("click",()=>{
+money *= clickValue;
+checkAchievements();
+update();
+});
+
+function buyUpgrade(){
+let amount = parseInt(document.getElementById("amountSelect").value);
+let total = upgradeCost * amount;
+
+if(money >= total){
+clickValue += 0.001 * amount;
+money = 1;
+show("🔥 تم التطوير!");
+update();
+}
+}
+
+function buyAuto(){
+let amount = parseInt(document.getElementById("amountSelect").value);
+let total = autoCost * amount;
+
+if(money >= total){
+autoCount += amount;
+money -= total;
+show("🤖 تم شراء Auto!");
+update();
+}
+}
+
+function buySuper(){
+if(money >= superCost){
+clickValue = 1.001;
+money = 1;
+upgradeCost /= 50;
+autoCost /= 50;
+show("⚡ إعادة ضبط + تخفيض الأسعار ÷50");
+update();
+}
+}
+
+setInterval(()=>{
+if(autoCount > 0){
+money *= Math.pow(clickValue,autoCount);
+update();
+}
+},1000);
+
+let got100=false;
+let got1M=false;
+
+function checkAchievements(){
+if(money>=100 && !got100){
+got100=true;
+show("💰 وصلت 100!");
+}
+if(money>=1000000 && !got1M){
+got1M=true;
+show("👑 مليون!");
+}
+}
+
+function show(text){
+popup.textContent=text;
+popup.style.right="20px";
+setTimeout(()=>{popup.style.right="-400px";},15000);
+}
+
+update();
+</script>
+
+</body>
+</html>

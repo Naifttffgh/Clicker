@@ -1,147 +1,96 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5167186823593206"
-     crossorigin="anonymous"></script>
 <meta charset="UTF-8">
-<title>Clicker</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>موقع الألعاب</title>
+
+<!-- Google AdSense -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5167186823593206"
+     crossorigin="anonymous"></script>
+
 <style>
-  body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    margin-top: 50px;
-    transition: background-color 0.3s, color 0.3s;
-    background-color: #ffffff;
-    color: #111111;
-  }
-  #info { margin: 20px; font-size: 20px; line-height: 1.8; }
-  button, select {
-    padding: 10px 20px;
-    font-size: 16px;
-    margin: 5px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  button:hover { transform: scale(1.05); }
-  select { background-color: #f0f0f0; }
-  #clickBtn { background-color: #4CAF50; color: white; }
-  #upgradeBtn { background-color: #2196F3; color: white; }
-  #halveBtn { background-color: #FF5722; color: white; }
-  #themeBtn { background-color: #9C27B0; color: white; }
-  .flash {
-    animation: flashAnim 0.2s ease-in-out;
-  }
-  @keyframes flashAnim {
-    0% { transform: scale(1); background-color: #ffff99; }
-    50% { transform: scale(1.2); background-color: #ffffff; }
-    100% { transform: scale(1); background-color: inherit; }
-  }
+body{
+    font-family:Arial;
+    text-align:center;
+    background:#111;
+    color:white;
+    margin:0;
+}
+header{
+    background:#1e1e1e;
+    padding:20px;
+    font-size:22px;
+}
+.gameCard{
+    display:inline-block;
+    margin:30px;
+    padding:30px;
+    background:#1f1f1f;
+    border-radius:12px;
+    width:250px;
+}
+a{
+    display:inline-block;
+    margin-top:15px;
+    padding:10px 20px;
+    background:#4CAF50;
+    color:white;
+    text-decoration:none;
+    border-radius:8px;
+}
+.coming{
+    margin-top:50px;
+    opacity:0.6;
+    font-size:22px;
+}
+.ad-box{
+    margin:20px auto;
+    max-width:900px;
+}
 </style>
 </head>
 <body>
 
-<h1>Clicker</h1>
+<header>🎮 موقع الألعاب</header>
 
-<div id="info">
-  المال: $<span id="money">1</span><br>
-  قيمة الضغطة: <span id="clickValue">1.001</span><br>
-  سعر التطوير: $<span id="upgradeCost">1000</span>
+<!-- إعلان أعلى الصفحة -->
+<div class="ad-box">
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-5167186823593206"
+     data-ad-slot="6368670320"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
 </div>
 
-<button id="clickBtn">اضغط هنا</button>
-<button id="upgradeBtn">طور</button>
-<select id="upgradeTimes">
-  <option value="1">1</option>
-  <option value="3">3</option>
-  <option value="5">5</option>
-  <option value="10">10</option>
-  <option value="30">30</option>
-  <option value="50">50</option>
-  <option value="100">100</option>
-  <option value="300">300</option>
-  <option value="500">500</option>
-</select>
-<br>
-<button id="halveBtn">قسّم سعر التطوير على 2 عند الوصول للضعف</button>
-<button id="themeBtn">تغيير الخلفية</button>
+<h2>اختر لعبة:</h2>
 
+<div class="gameCard">
+    <h3>💰 Clicker Game</h3>
+    <p>لعبة تطوير وجمع أموال</p>
+    <a href="clicker.html">ابدأ اللعب</a>
+</div>
+
+<div class="coming">
+🚀 ألعاب جديدة قريبًا... (Coming Soon)
+</div>
+
+<!-- إعلان أسفل الصفحة -->
+<div class="ad-box">
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-5167186823593206"
+     data-ad-slot="9353926319"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
 <script>
-let money = 1;
-let clickValue = 1.001;
-let upgradeCost = 1000;
-let darkMode = false;
-
-const moneyEl = document.getElementById('money');
-const clickValueEl = document.getElementById('clickValue');
-const upgradeCostEl = document.getElementById('upgradeCost');
-const clickBtn = document.getElementById('clickBtn');
-const upgradeBtn = document.getElementById('upgradeBtn');
-const upgradeTimesSelect = document.getElementById('upgradeTimes');
-const halveBtn = document.getElementById('halveBtn');
-const themeBtn = document.getElementById('themeBtn');
-
-function updateDisplay() {
-  moneyEl.textContent = money.toFixed(3);
-  clickValueEl.textContent = clickValue.toFixed(3);
-  upgradeCostEl.textContent = upgradeCost.toFixed(2);
-}
-
-function flashEffect(element){
-  element.classList.add('flash');
-  setTimeout(() => element.classList.remove('flash'), 200);
-}
-
-// كل ضغطة تضرب المال في قيمة الضغطة
-clickBtn.addEventListener('click', () => {
-  money *= clickValue;
-  updateDisplay();
-  flashEffect(clickBtn);
-});
-
-// التطوير: زيادة قيمة الضغطة فقط، المال يعود 1
-upgradeBtn.addEventListener('click', () => {
-  let times = parseInt(upgradeTimesSelect.value);
-  for (let i = 0; i < times; i++) {
-    if (money >= upgradeCost) {
-      money -= upgradeCost;
-      clickValue += 0.001;
-    }
-  }
-  money = 1; // إعادة المال فقط
-  updateDisplay();
-  flashEffect(upgradeBtn);
-});
-
-// تقسيم سعر التطوير: المال يعود 1 وقيمة الضغطة تعود 1.001
-halveBtn.addEventListener('click', () => {
-  if (clickValue >= 2 * 1.001) {
-    upgradeCost /= 2;
-    money = 1;
-    clickValue = 1.001;
-    updateDisplay();
-    flashEffect(halveBtn);
-  } else {
-    alert("لم تصل بعد للضعف المطلوب!");
-  }
-});
-
-// تغيير الخلفية بين الأسود والأبيض
-themeBtn.addEventListener('click', () => {
-  darkMode = !darkMode;
-  if(darkMode){
-    document.body.style.backgroundColor = '#111111';
-    document.body.style.color = '#ffffff';
-  } else {
-    document.body.style.backgroundColor = '#ffffff';
-    document.body.style.color = '#111111';
-  }
-  flashEffect(themeBtn);
-});
-
-updateDisplay();
+     (adsbygoogle = window.adsbygoogle || []).push({});
 </script>
+</div>
 
 </body>
 </html>
